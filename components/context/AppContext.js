@@ -9,6 +9,7 @@ export const AppContext = React.createContext(undefined);
  */
 export const AppProvider = (props) => {
     const [cart, setCart] = useState(null);
+    const [requestError, setRequestError] = useState(null);
     useEffect(async () => {
         const wooCart = await client.query({query: GET_CART})
         console.log('woo-next-cart', wooCart.data)

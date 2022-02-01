@@ -1,16 +1,12 @@
 // noinspection JSUnresolvedFunction
 
 import Link from 'next/link'
-import React, {useState, useContext, useEffect} from 'react'
-import {AppContext} from "../context/AppContext";
-import {addFirstProduct, updateCart} from "../../utils/Functions";
+import React, {useState, useEffect} from 'react'
 import {Form} from "react-bootstrap";
-import {gql, useMutation} from "@apollo/client";
+import {useMutation} from "@apollo/client";
 import { v4 as uuidv4 } from 'uuid';
 import {ADD_TO_CART} from "../mutations/ADD_TO_CART";
-import data from "bootstrap/js/src/dom/data";
 const AddToCartBtn = ( props ) => {
-    //const { product } = props.props.product;
     let id = new Buffer(props.props.product.id, 'base64')
     id = id.toString('ascii').split(`:`)[1]
     const productQryInput = {
@@ -19,8 +15,6 @@ const AddToCartBtn = ( props ) => {
         quantity: 1,
         category: props.props.product.category
     };
-    const [cart, setCart] = useContext(AppContext);
-    const [newCart, setNewCart] = useContext(AppContext)
     const [showViewCart, setShowViewCart] = useState(false);
     const [requestError, setRequestError] = useState(null);
     const [ variationSelected, setSelectedVariation ] = useState( '' );

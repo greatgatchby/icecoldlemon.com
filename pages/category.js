@@ -2,7 +2,6 @@ import {ButtonGroup, Card, Col, Container, Dropdown, Row} from "react-bootstrap"
 import Products from "../components/Products";
 import React from "react";
 import client from "../components/ApolloClient";
-import {gql} from "@apollo/client";
 import {CATEGORY_QUERY} from "../components/queries/category";
 
 const ProductsPage = (props) => {

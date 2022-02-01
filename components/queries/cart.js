@@ -48,10 +48,6 @@ query GET_CART {
                 price
               }
             }
-            simpleVariations {
-              name
-              value
-            }
           }
         }
       }

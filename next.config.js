@@ -1,5 +1,5 @@
 module.exports = {
   images: {
-    domains: ['http://localhost/wordpress', 'static.nike.com', 'localhost', 'via.placeholder.com'],
+    domains: ['seed.x10.mx', 'static.nike.com', 'localhost', 'via.placeholder.com'],
   }
 }
