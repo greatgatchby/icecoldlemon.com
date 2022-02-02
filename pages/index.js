@@ -7,13 +7,12 @@ export default function Home() {
   // noinspection DuplicatedCode
     return (
       <>
-      <main>
           <div className="position-relative overflow-hidden p-0 mb-md-3 text-center bg-icl">
               <div className="col-md-5 p-lg-5 mx-auto my-5 bg-header">
                   <Image className={'shadow-lg'} src={logo}  alt={'logo: jn in square at 90 degrees'}/>
                   <h1 className="text-light">Creps, Clothes, Vibes</h1>
                   <form>
-                      <Row>
+                      <Row className={'d-flex justify-content-center'}>
                           <Col xs={9}>
                               <div className={'w-100 my-2'}>
                                   <div className="form-floating ps-1">
@@ -177,7 +176,6 @@ export default function Home() {
                       </div>
                   </div>
           </Container>
-      </main>
       </>
   )
 }

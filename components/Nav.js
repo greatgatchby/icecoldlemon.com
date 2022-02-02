@@ -19,7 +19,7 @@ const Navigation = () => {
                         <Col>
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         </Col>
-                        <Col className={'d-lg-none d-flex justify-content-end'}>
+                        <Col className={'d-lg-none d-flex justify-content-end p-0 m-0'}>
                             <a href={'https://www.fiverr.com/share/7WQXv1'}><Button className={'btn btn-primary btn-header px-5 me-2'}>Login</Button></a>
                             <CartIcon />
                         </Col>

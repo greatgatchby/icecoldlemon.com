@@ -132,15 +132,17 @@ html{
   }
 }
 main{
-   margin-top: 40px;
+  margin-top: 50px;
 }
-@media (max-width: 768px){
+@media (max-width: 820px){
   main{
-    margin-top:100px;
+    margin-top:100px
   }
-  .logo {
+  .pricing{
+    display: none;
+  }
+  .logo{
     width: 100%;
-    margin-left: 15px;
   }
 }
 html::-webkit-scrollbar{

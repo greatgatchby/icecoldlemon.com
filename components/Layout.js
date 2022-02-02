@@ -21,9 +21,11 @@ const Layout = (props) => {
                         <link rel="icon" href="/favicon.ico"/>
                     </Head>
                     <Header/>
+                    <main>
                     <Container fluid className={'main-content p-0 m-0'}>
                         {props.children}
                     </Container>
+                    </main>
                     <Footer/>
                 </ApolloHooksProvider>
             </ApolloProvider>

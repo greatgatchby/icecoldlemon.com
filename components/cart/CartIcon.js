@@ -21,7 +21,7 @@ const CartIcon = () => {
                     {productCount ? <Badge bg={'danger'} className={'position-absolute rounded-pill left-100'}>{productCount}</Badge>: ''}
                 </Button>
                 <div className={'align-self-center'}>
-                    {totalPrice ? <b className={'text-gold'}>{totalPrice}</b>: ''}
+                    {totalPrice ? <b className={'text-gold pricing'}>{totalPrice}</b>: ''}
                 </div>
             </a>
         </NextLink >
