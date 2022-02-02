@@ -153,6 +153,10 @@ main {
   margin-top: 50px;
 }
 
+.logo {
+  padding-left: 10px;
+}
+
 @media (max-width: 820px) {
   main {
     margin-top: 100px;

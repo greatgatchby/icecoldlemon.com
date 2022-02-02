@@ -1,11 +1,13 @@
 // noinspection JSUnresolvedFunction
 
 import Link from 'next/link'
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import {Form} from "react-bootstrap";
 import {useMutation} from "@apollo/client";
 import { v4 as uuidv4 } from 'uuid';
 import {ADD_TO_CART} from "../mutations/ADD_TO_CART";
+import {updateCart} from "../../utils/Functions";
+import {AppContext} from "../context/AppContext";
 const AddToCartBtn = ( props ) => {
     let id = new Buffer(props.props.product.id, 'base64')
     id = id.toString('ascii').split(`:`)[1]
@@ -15,6 +17,7 @@ const AddToCartBtn = ( props ) => {
         quantity: 1,
         category: props.props.product.category
     };
+    const [, setCart] = useContext(AppContext);
     const [showViewCart, setShowViewCart] = useState(false);
     const [requestError, setRequestError] = useState(null);
     const [ variationSelected, setSelectedVariation ] = useState( '' );
@@ -34,11 +37,7 @@ const AddToCartBtn = ( props ) => {
             quantity: productQryInput.quantity,
             productId: productQryInput.productId,
         },
-        onCompleted: (data) => {
-            // On Success:
-            // 1. Make the GET_CART query to update the cart with new values in React context.
-            refetch();
-            // 2. Show View Cart Button
+        onCompleted: () => {
             setShowViewCart(true)
         },
         onError: (error) => {
@@ -50,7 +49,8 @@ const AddToCartBtn = ( props ) => {
     const handleAddToCartClick = async () => {
         // If component is rendered client side.
         setRequestError(null);
-        await addToCart()
+        const result = await addToCart()
+        setCart(await updateCart(result.data.addToCart.cart.contents.nodes))
     };
     const addVariable = (e) =>{
         if(addVariableToCart === false) {

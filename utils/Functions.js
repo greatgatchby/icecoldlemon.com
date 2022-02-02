@@ -6,6 +6,7 @@
  */
 import client from "../components/ApolloClient";
 import {gql, useMutation} from "@apollo/client";
+import {GET_CART} from "../components/queries/cart";
 
 
 export const getFloatVal = ( string ) => {
@@ -46,8 +47,30 @@ export const createNewProduct = ( product, productPrice, qty ) => {
 
 };
 
-export const updateCart = ( existingCart, product, qtyToBeAdded, newQty = false  ) => {
-    const updatedProducts = getUpdatedProducts( existingCart , product, qtyToBeAdded, newQty );
+export const updateCart = async () => {
+    const wooCart = await client.query({query: GET_CART})
+    console.log('woo-next-cart', wooCart.data)
+    let products = []
+    for (let i = 0; i < wooCart.data.cart.contents.edges.length;i++){
+        let product = wooCart.data.cart.contents.edges[i]
+        product = {
+            id:product.node.product.node.id,
+            image:product.node.product.node.image.sourceUrl,
+            name:product.node.product.node.name,
+            price: product.node.product.node.price,
+            qty: product.node.quantity,
+            totalPrice: product.node.product.node.total,
+        }
+        products.push(product)
+    }
+    const newCart = {
+        products: products,
+        totalProductsCount: wooCart.data.cart.contents.itemCount,
+        totalProductsPrice: wooCart.data.cart.total,
+    }
+    localStorage.setItem('woo-next-cart', JSON.stringify(newCart))
+    return newCart
+    /*const updatedProducts = getUpdatedProducts( existingCart , product, qtyToBeAdded, newQty );
     let totalPrice = 0
     let totalQty = 0
     let totalProducts = updatedProducts.length
@@ -62,6 +85,7 @@ export const updateCart = ( existingCart, product, qtyToBeAdded, newQty = false 
     };
     localStorage.setItem( 'woo-next-cart', JSON.stringify( updatedCart ) );
     return updatedCart;
+     */
 
 };
 
