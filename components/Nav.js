@@ -11,10 +11,8 @@ const Navigation = () => {
 
 
             <Navbar expand="lg" className={'fixed-top navbar-dark bg-nav overlay'}>
-                <Row className={'justify-content-center text-center'}>
-                    <Col className={'mx-5'}>
+                <Row className={'logo text-center'}>
                         <NavLink href={'/'}><a><Image className={'shadow-lg logo'} src={logo}  alt={'logo: jn in square at 90 degrees'}/></a></NavLink>
-                    </Col>
                 </Row>
                 <Container fluid>
                     <Row className={'w-100'}>
@@ -22,10 +20,11 @@ const Navigation = () => {
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         </Col>
                         <Col className={'d-lg-none d-flex justify-content-end'}>
+                            <a href={'https://www.fiverr.com/share/7WQXv1'}><Button className={'btn btn-primary btn-header px-5 me-2'}>Login</Button></a>
                             <CartIcon />
                         </Col>
                         <Navbar.Collapse id="justify-content-start basic-navbar-nav w-100">
-                        <Nav className="me-auto">
+                        <Nav className="me-auto w-100">
                             <NavLink href="/"><a className="nav-link">Home</a></NavLink>
                             <NavLink href="/category?category=clothing"><a className="nav-link">Clothing</a></NavLink>
                             <NavLink href="/category?category=footwear"><a className="nav-link">Footwear</a></NavLink>
@@ -35,8 +34,10 @@ const Navigation = () => {
                             <NavLink href="/post?id=someid"><a className="nav-link">About us</a></NavLink>
                             <NavLink href="/post?id=someid"><a className="nav-link">Charity</a></NavLink>
                         </Nav>
-                        <a href={'https://www.fiverr.com/share/7WQXv1'}><Button className={'btn btn-primary btn-header px-5 me-2'}>Login</Button></a>
-                        <div className={'d-sm-non d-md-none d-lg-block'}>
+                            <div className={'d-none d-lg-block'}>
+                                <a href={'https://www.fiverr.com/share/7WQXv1'}><Button className={'btn btn-primary btn-header px-5 me-2'}>Login</Button></a>
+                            </div>
+                        <div className={'d-none d-lg-block'}>
                             <CartIcon/>
                         </div>
                     </Navbar.Collapse>
