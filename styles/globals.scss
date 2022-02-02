@@ -1,3 +1,4 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
 //variables
 $bg-secondary-t: rgba(234, 234, 234, 0.6);
 $primary: #38b6ff;
@@ -91,6 +92,20 @@ a {
 }
 .td-none{
   text-decoration: none;
+}
+@media (max-width: 768px) {
+  main{
+    margin-top:60px;
+  }
+  .logo{
+    width: 100%;
+    margin-left: 0 !important;
+  }
+}
+@media (min-width: 768px) {
+  .logo{
+    padding-left: 10px !important;
+  }
 }
 html{
   padding: 0;

@@ -21,7 +21,7 @@ const Layout = (props) => {
                         <link rel="icon" href="/favicon.ico"/>
                     </Head>
                     <Header/>
-                    <Container fluid className={'main-content p-0 pt-5 m-0 my-5'}>
+                    <Container fluid className={'main-content p-0 pt-5 m-0'}>
                         {props.children}
                     </Container>
                     <Footer/>
