@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-export const ADD_TO_CART = gql`mutation MyMutation($quantity: Int!, $productId: Int!) {
+const ADD_TO_CART = gql`mutation MyMutation($quantity: Int!, $productId: Int!) {
   addToCart(input: {productId: $productId, quantity: $quantity}) {
       clientMutationId
     cart {
@@ -23,3 +23,5 @@ export const ADD_TO_CART = gql`mutation MyMutation($quantity: Int!, $productId: 
     }
   }
 }`
+
+module.exports = ADD_TO_CART

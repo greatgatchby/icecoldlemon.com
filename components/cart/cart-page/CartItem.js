@@ -2,7 +2,6 @@
 
 import React from "react";
 import {X} from "react-bootstrap-icons";
-import {removeItemFromCart, updateCart, getid} from "../../../utils/Functions";
 import { useState, useContext } from "react"
 import Image from "next/image";
 import {useMutation} from "@apollo/client";
@@ -12,7 +11,7 @@ import {AppContext} from '../../context/AppContext'
 
 const CartItem = ({item, index, setCart}) => {
     const [ productCount, setProductCount ] = useState( item.qty );
-    const [requestError, setRequestError] = useContext(AppContext)
+    const [, setRequestError] = useContext(AppContext)
     console.warn(item)
     let productQryInput = {
         productId: item.id,
@@ -27,7 +26,7 @@ const CartItem = ({item, index, setCart}) => {
         variables: {
             keys: productQryInput.productId,
         },
-        onCompleted: (data) => {
+        onCompleted: () => {
             // On Success:
             // 1. Make the GET_CART query to update the cart with new values in React context.
             // 2. Show View Cart Button
@@ -58,7 +57,7 @@ const CartItem = ({item, index, setCart}) => {
             }
         }
     });
-    const handleRemoveProduct = (id) => {
+    const handleRemoveProduct = () => {
         removeItem()
     }
     const handleChange = async ( e ) => {
