@@ -27,6 +27,7 @@ query GET_CART {
           subtotalTax
           tax
           total
+          key
           product {
             node {
               image {

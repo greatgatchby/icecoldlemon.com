@@ -3,12 +3,13 @@ import {AppContext} from "../context/AppContext";
 import NextLink  from 'next/link'
 import {Badge, Button} from "react-bootstrap";
 import React, {useContext, useEffect} from "react";
+import {updateCart} from '../../utils/Functions'
 
 const CartIcon = () => {
     const [cart,setCart] = useContext(AppContext)
     let productCount = (null!== cart && Object.keys(cart).length ? cart.totalProductsCount : '')
     let totalPrice = (null!== cart && Object.keys(cart).length ? cart.totalProductsPrice : '')
-    useEffect(() => {
+    useEffect( () => {
         productCount = (null!== cart && Object.keys(cart).length ? cart.totalProductsCount : '')
         totalPrice =  (null!== cart && Object.keys(cart).length ? cart.totalProductsPrice : '')
     }, [setCart])

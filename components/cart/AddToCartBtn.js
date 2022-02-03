@@ -17,7 +17,7 @@ const AddToCartBtn = ( props ) => {
         quantity: 1,
         category: props.props.product.category
     };
-    const [, setCart] = useContext(AppContext);
+    const [cart , setCart] = useContext(AppContext);
     const [showViewCart, setShowViewCart] = useState(false);
     const [requestError, setRequestError] = useState(null);
     const [ variationSelected, setSelectedVariation ] = useState( '' );
@@ -49,9 +49,13 @@ const AddToCartBtn = ( props ) => {
     const handleAddToCartClick = async () => {
         // If component is rendered client side.
         setRequestError(null);
-        const result = await addToCart()
-        setCart(await updateCart(result.data.addToCart.cart.contents.nodes))
+        await addToCart()
     };
+    /*useEffect(()=>{
+        console.warn(cart)
+    }, [setCart])
+
+     */
     const addVariable = (e) =>{
         if(addVariableToCart === false) {
             setSelectedVariation(e.target.value)

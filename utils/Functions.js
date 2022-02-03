@@ -7,6 +7,8 @@
 import client from "../components/ApolloClient";
 import {gql, useMutation} from "@apollo/client";
 import {GET_CART} from "../components/queries/cart";
+import {useContext} from 'React'
+import {AppContext} from '../components/context/AppContext'
 
 
 export const getFloatVal = ( string ) => {
@@ -49,7 +51,6 @@ export const createNewProduct = ( product, productPrice, qty ) => {
 
 export const updateCart = async () => {
     const wooCart = await client.query({query: GET_CART})
-    console.log('woo-next-cart', wooCart.data)
     let products = []
     for (let i = 0; i < wooCart.data.cart.contents.edges.length;i++){
         let product = wooCart.data.cart.contents.edges[i]
@@ -160,3 +161,9 @@ export const checkOutInitiation = async () => {
     console.warn(result)
 }
 //TODO create checkout data
+export const getid = (id) => {
+    let buff = new Buffer(id, "base64")
+    id = buff.toString('ascii')
+    id = id.split(':')[1]
+    return id
+}

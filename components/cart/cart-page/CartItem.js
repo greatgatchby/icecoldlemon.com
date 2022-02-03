@@ -2,16 +2,22 @@
 
 import React from "react";
 import {X} from "react-bootstrap-icons";
-import {removeItemFromCart, updateCart} from "../../../utils/Functions";
-import { useState } from "react"
+import {removeItemFromCart, updateCart, getid} from "../../../utils/Functions";
+import { useState, useContext } from "react"
 import Image from "next/image";
 import {useMutation} from "@apollo/client";
 import {REMOVE_FROM_CART} from "../../mutations/remove from cart";
+import {CHANGE_QUANTITY} from "../../mutations/CHANGE_QUANTITY";
+import {AppContext} from '../../context/AppContext'
 
 const CartItem = ({item, index, setCart}) => {
     const [ productCount, setProductCount ] = useState( item.qty );
-    const productQryInput = {
-        productId: item.id
+    const [requestError, setRequestError] = useContext(AppContext)
+    console.warn(item)
+    let productQryInput = {
+        productId: item.id,
+        quantity: productCount,
+        key: item.key
     }
     const [removeItem, {
         data: addToCartRes,
@@ -24,9 +30,27 @@ const CartItem = ({item, index, setCart}) => {
         onCompleted: (data) => {
             // On Success:
             // 1. Make the GET_CART query to update the cart with new values in React context.
-            refetch();
             // 2. Show View Cart Button
-            setShowViewCart(true)
+        },
+        onError: (error) => {
+            if (error) {
+                setRequestError(error?.graphQLErrors?.[0]?.message ?? '');
+            }
+        }
+    });
+    const [updateItem, {
+        data: updateCartRes,
+        loading: updateCartLoading,
+        error: updateCartError
+    }] = useMutation(CHANGE_QUANTITY, {
+        variables: {
+            key: productQryInput.key,
+            quantity: parseInt(productQryInput.quantity)
+        },
+        onCompleted: () => {
+            // On Success:
+            // 1. Make the GET_CART query to update the cart with new values in React context.
+            // 2. Show View Cart Button
         },
         onError: (error) => {
             if (error) {
@@ -37,8 +61,11 @@ const CartItem = ({item, index, setCart}) => {
     const handleRemoveProduct = (id) => {
         removeItem()
     }
-    const handleChange = ( event ) => {
-
+    const handleChange = async ( e ) => {
+        setProductCount(e.target.value)
+        let result = await updateItem()
+        console.warn(result)
+        /*
         if ( process.browser ) {
 
             const newQty = event.target.value;
@@ -56,6 +83,7 @@ const CartItem = ({item, index, setCart}) => {
             setCart( updatedCart );
 
         }
+         */
     };
     return (
         <tr className={'cart-item'}>
