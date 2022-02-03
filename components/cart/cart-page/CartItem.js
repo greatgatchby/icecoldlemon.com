@@ -6,7 +6,7 @@ import { useState, useContext } from "react"
 import Image from "next/image";
 import {useMutation} from "@apollo/client";
 import {REMOVE_FROM_CART} from "../../mutations/remove from cart";
-import {CHANGE_QUANTITY} from "../../mutations/CHANGE_QUANTITY";
+import {CHANGE_QUANTITY} from "../../mutations/change_quantity";
 import {AppContext} from '../../context/AppContext'
 
 const CartItem = ({item, index, setCart}) => {

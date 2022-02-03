@@ -1,6 +1,6 @@
 import {gql} from "@apollo/client";
 
-const CHANGE_QUANTITY = gql`
+const Change_quantity = gql`
 mutation updateItemQuantities($key: ID!, $quantity: Int!) {
   updateItemQuantities(input: {items: {key: $key, quantity: $quantity}}) {
     updated {
@@ -10,4 +10,4 @@ mutation updateItemQuantities($key: ID!, $quantity: Int!) {
   }
 }
 `
-module.exports = CHANGE_QUANTITY
+module.exports = Change_quantity
