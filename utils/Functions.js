@@ -5,10 +5,7 @@
  * @return {any}
  */
 import client from "../components/ApolloClient";
-import {gql, useMutation} from "@apollo/client";
 import {GET_CART} from "../components/queries/cart";
-import {useContext} from 'React'
-import {AppContext} from '../components/context/AppContext'
 
 
 export const getFloatVal = ( string ) => {
