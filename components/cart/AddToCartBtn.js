@@ -51,8 +51,8 @@ const AddToCartBtn = ( props ) => {
         // If component is rendered client side.
         setRequestError(null);
         await addToCart()
-        let result = await updateCart
-        setCart(result)
+        let result = await updateCart(setCart)
+
     };
     /*useEffect(()=>{
         console.warn(cart)

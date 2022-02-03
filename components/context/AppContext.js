@@ -12,8 +12,7 @@ export const AppProvider = (props) => {
     const [cart, setCart] = useState(null);
     const [requestError, setRequestError] = useState(null);
     useEffect(async () => {
-        let result = await updateCart()
-        setCart(result)
+        updateCart(setCart)
     },[setCart])
     /*
     useEffect(() => {

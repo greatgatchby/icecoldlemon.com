@@ -45,7 +45,7 @@ export const createNewProduct = ( product, productPrice, qty ) => {
 
 };
 
-export const updateCart = async () => {
+export const updateCart = async (setCart) => {
     const wooCart = await client.query({query: GET_CART})
     let products = []
     for (let i = 0; i < wooCart.data.cart.contents.edges.length;i++){
@@ -53,6 +53,7 @@ export const updateCart = async () => {
         product = {
             id:product.node.product.node.id,
             image:product.node.product.node.image.sourceUrl,
+            key: product.node.key,
             name:product.node.product.node.name,
             price: product.node.product.node.price,
             qty: product.node.quantity,
@@ -66,7 +67,7 @@ export const updateCart = async () => {
         totalProductsPrice: wooCart.data.cart.total,
     }
     localStorage.setItem('woo-next-cart', JSON.stringify(newCart))
-    return newCart
+    setCart(newCart)
     /*const updatedProducts = getUpdatedProducts( existingCart , product, qtyToBeAdded, newQty );
     let totalPrice = 0
     let totalQty = 0

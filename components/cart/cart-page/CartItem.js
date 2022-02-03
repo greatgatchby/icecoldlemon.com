@@ -13,7 +13,6 @@ import {updateCart} from  '../../../utils/Functions'
 const CartItem = ({item, index, setCart}) => {
     const [ productCount, setProductCount ] = useState( item.qty );
     const [, setRequestError] = useContext(AppContext)
-    console.warn(item)
     //let id = new Buffer(item.id, 'base64')
     let productQryInput = {
         productId: item.id,
@@ -26,7 +25,7 @@ const CartItem = ({item, index, setCart}) => {
         error: addToCartError
     }] = useMutation(REMOVE_FROM_CART, {
         variables: {
-            keys: productQryInput.productId,
+            keys: productQryInput.key,
         },
         onCompleted: () => {
             // On Success:
@@ -61,14 +60,13 @@ const CartItem = ({item, index, setCart}) => {
     });
     const handleRemoveProduct = async () => {
         await removeItem()
-        let result = await updateCart()
-        setCart(result)
+        updateCart(setCart)
     }
     const handleChange = async ( e ) => {
         await setProductCount(e.target.value)
         await updateItem()
-        let result = await updateCart()
-        setCart(result)
+        updateCart(setCart)
+
         /*
         if ( process.browser ) {
 
