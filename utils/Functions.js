@@ -7,7 +7,6 @@
 import client from "../components/ApolloClient";
 import {GET_CART} from "../components/queries/cart";
 
-
 export const getFloatVal = ( string ) => {
 
     let floatValue = string.match( /[+-]?\d+(\.\d+)?/g )[0];

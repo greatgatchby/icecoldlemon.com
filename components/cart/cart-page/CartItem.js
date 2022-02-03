@@ -6,13 +6,15 @@ import { useState, useContext } from "react"
 import Image from "next/image";
 import {useMutation} from "@apollo/client";
 import {REMOVE_FROM_CART} from "../../mutations/remove from cart";
-import {CHANGE_QUANTITY} from "../../mutations/change_quantity";
+import CHANGE_QUANTITY from "../../mutations/change_quantity";
 import {AppContext} from '../../context/AppContext'
+import {updateCart} from  '../../../utils/Functions'
 
 const CartItem = ({item, index, setCart}) => {
     const [ productCount, setProductCount ] = useState( item.qty );
     const [, setRequestError] = useContext(AppContext)
     console.warn(item)
+    //let id = new Buffer(item.id, 'base64')
     let productQryInput = {
         productId: item.id,
         quantity: productCount,
@@ -57,13 +59,16 @@ const CartItem = ({item, index, setCart}) => {
             }
         }
     });
-    const handleRemoveProduct = () => {
-        removeItem()
+    const handleRemoveProduct = async () => {
+        await removeItem()
+        let result = await updateCart()
+        setCart(result)
     }
     const handleChange = async ( e ) => {
-        setProductCount(e.target.value)
-        let result = await updateItem()
-        console.warn(result)
+        await setProductCount(e.target.value)
+        await updateItem()
+        let result = await updateCart()
+        setCart(result)
         /*
         if ( process.browser ) {
 

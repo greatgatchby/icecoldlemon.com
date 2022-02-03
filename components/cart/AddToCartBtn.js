@@ -5,9 +5,10 @@ import React, {useState, useEffect, useContext} from 'react'
 import {Form} from "react-bootstrap";
 import {useMutation} from "@apollo/client";
 import { v4 as uuidv4 } from 'uuid';
-import {ADD_TO_CART} from "../mutations/ADD_TO_CART";
-import {updateCart} from "../../utils/Functions";
+import ADD_TO_CART from "../mutations/ADD_TO_CART";
 import {AppContext} from "../context/AppContext";
+import {updateCart} from '../../utils/Functions'
+
 const AddToCartBtn = ( props ) => {
     let id = new Buffer(props.props.product.id, 'base64')
     id = id.toString('ascii').split(`:`)[1]
@@ -50,6 +51,8 @@ const AddToCartBtn = ( props ) => {
         // If component is rendered client side.
         setRequestError(null);
         await addToCart()
+        let result = await updateCart
+        setCart(result)
     };
     /*useEffect(()=>{
         console.warn(cart)
