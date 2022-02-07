@@ -4,14 +4,53 @@ import clearpayLogo from "../../assets/clearpay-badge-mintonblack79x15@2x.png";
 import applePayLogo from "../../assets/Apple_Pay_Mark_RGB_041619.svg";
 import googlePayLogo from "../../assets/GPay_Acceptance_Mark_800.png";
 import stripeLogo from "../../assets/Stripe wordmark - blurple (large).png";
-import React, {useContext} from "react";
-import {checkOutInitiation} from "../../utils/Functions";
+import React, {useContext, useState} from "react";
 import {AppContext} from "../context/AppContext";
+import {CHECKOUT} from '../mutations/checkout'
+import {useMutation} from "@apollo/client";
+import {updateCart} from '../../utils/Functions'
 
 const Checkout = () => {
     const [cart,setCart] = useContext(AppContext)
-    const handleCheckoutClick = () => {
-        checkOutInitiation()
+    const [,setRequestError] = useContext(AppContext)
+    const [billingEQshipping, setbillingEQshipping] = useState(true)
+    let checkOutQryInput = {
+        billing: {address1: "18 wadleys road",
+            city: "solihull",
+            address2: "",
+            country: 'GB',
+            email: "jngatchu@gmail.com",
+            firstName: "Jake",
+            lastName: "Ngatchu",
+            phone: "07935242587",
+            state: "warwickshire"
+        },
+        paymentMethod: "stripe",
+    }
+    const [checkout, {
+        data: checkoutRes,
+        loading: checkOutLoading,
+        error: checkOutError
+    }] = useMutation(CHECKOUT, {
+        variables: {
+            input: checkOutQryInput
+        },
+        onCompleted: () => {
+            updateCart(setCart)
+            setShowViewCart(true)
+        },
+        onError: (error) => {
+            if (error) {
+                setRequestError(error?.graphQLErrors?.[0]?.message ?? '');
+            }
+        }
+    })
+    const handleCheckoutClick = async () => {
+        let redirect = await checkout
+        console.warn(redirect())
+    }
+    const handleShippingSameasbilling = (e) => {
+        setbillingEQshipping(e.target.checked)
     }
     return (
         <Card className={'p-0 m-0'}>
@@ -24,7 +63,7 @@ const Checkout = () => {
                 <Row className={'d-flex justify-content-center p-3'}>
                     <Col xs={8}>
                         <form>
-                            <FormSelect>
+                            <FormSelect onChange={()=> console.warn('hello')}>
                                 <option>Express</option>
                                 <option>Standard</option>
                                 <option>Click and Collect</option>
@@ -32,48 +71,207 @@ const Checkout = () => {
                         </form>
                     </Col>
                 </Row>
-                <div className={'w-100 card-header'}>Accepted Payment Methods Method</div>
-                <Row className={'p-4'}>
-                    <Col xs={3}>
-                        <Image src={clearpayLogo} alt={'clear pay'} />
-                    </Col>
-                    <Col xs={3}>
-                        <Image src={applePayLogo} alt={'apple pay'} />
-                    </Col>
-                    <Col xs={3}>
-                        <Image src={googlePayLogo} alt={'google pay'}/>
-                    </Col>
-                    <Col xs={3}>
-                        <Image src={stripeLogo} alt={'pay with debit card using stripe'} />
-                    </Col>
-                </Row>
                 <Row className={'d-flex justify-content-center p-3'}>
-                    <Col xs={8}>
-                        <form>
-                            <FormSelect>
-                                <option hidden>Payment Method</option>
-                                <option>Clearpay</option>
-                                <option>Express</option>
-                                <option>GPay</option>
-                                <option>ApplePay</option>
-                                <option>Card</option>
-                            </FormSelect>
+                    <div className="col-md-8 order-md-1 p-2">
+                        <h4 className="mb-3">Billing address</h4>
+                        <form className="needs-validation" noValidate="">
+                            <div className="row">
+                                <div className="col-md-6 mb-3">
+                                    <label htmlFor="firstName">First name</label>
+                                    <input type="text" className="form-control" id="firstName" placeholder="" value=""
+                                           required=""/>
+                                        <div className="invalid-feedback">
+                                            Valid first name is required.
+                                        </div>
+                                </div>
+                                <div className="col-md-6 mb-3">
+                                    <label htmlFor="lastName">Last name</label>
+                                    <input type="text" className="form-control" id="lastName" placeholder="" value=""
+                                           required=""/>
+                                        <div className="invalid-feedback">
+                                            Valid last name is required.
+                                        </div>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="username">Username</label>
+                                <div className="input-group">
+                                    <div className="input-group-prepend">
+                                        <span className="input-group-text">@</span>
+                                    </div>
+                                    <input type="text" className="form-control" id="username" placeholder="Username"
+                                           required=""/>
+                                        <div className="invalid-feedback">
+                                            Your username is required.
+                                        </div>
+                                </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
+                                <input type="email" className="form-control" id="email" placeholder="you@example.com"/>
+                                    <div className="invalid-feedback">
+                                        Please enter a valid email address for shipping updates.
+                                    </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="address">Address</label>
+                                <input type="text" className="form-control" id="address" placeholder="1234 Main St"
+                                       required=""/>
+                                    <div className="invalid-feedback">
+                                        Please enter your shipping address.
+                                    </div>
+                            </div>
+
+                            <div className="mb-3">
+                                <label htmlFor="address2">Address 2 <span
+                                    className="text-muted">(Optional)</span></label>
+                                <input type="text" className="form-control" id="address2"
+                                       placeholder="Apartment or suite"/>
+                            </div>
+
+                            <div className="row">
+                                <div className="col-md-5 mb-3">
+                                    <label htmlFor="country">Country</label>
+                                    <select className="custom-select d-block w-100" id="country" required="" onChange={()=> console.warn('hello')}>
+                                        <option value="">Choose...</option>
+                                        <option>United States</option>
+                                    </select>
+                                    <div className="invalid-feedback">
+                                        Please select a valid country.
+                                    </div>
+                                </div>
+                                <div className="col-md-4 mb-3">
+                                    <label htmlFor="state">State</label>
+                                    <select className="custom-select d-block w-100" id="state" required="" onChange={()=> console.warn('hello')}>
+                                        <option value="">Choose...</option>
+                                        <option>California</option>
+                                    </select>
+                                    <div className="invalid-feedback">
+                                        Please provide a valid state.
+                                    </div>
+                                </div>
+                                <div className="col-md-3 mb-3">
+                                    <label htmlFor="zip">Zip</label>
+                                    <input type="text" className="form-control" id="zip" placeholder="" required=""/>
+                                        <div className="invalid-feedback">
+                                            Zip code required.
+                                        </div>
+                                </div>
+                            </div>
+                            <hr className="mb-4" />
+                                <div className="custom-control custom-checkbox">
+                                    <input type="checkbox" className="custom-control-input" id="same-address" counter={1} checked={billingEQshipping} onChange={handleShippingSameasbilling}/>
+                                        <label className="custom-control-label" htmlFor="same-address">Shipping address
+                                            is the same as my billing address</label>
+                                </div>
+                            <div className="custom-control custom-checkbox">
+                                    <input type="checkbox" className="custom-control-input" id="save-info"/>
+                                        <label className="custom-control-label" htmlFor="save-info">Register to Save Information for next time</label>
+                                </div>
+                            {billingEQshipping === false ? <div>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="firstName">First name</label>
+                                        <input type="text" className="form-control" id="firstName" placeholder="" value=""
+                                               required=""/>
+                                        <div className="invalid-feedback">
+                                            Valid first name is required.
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="lastName">Last name</label>
+                                        <input type="text" className="form-control" id="lastName" placeholder="" value=""
+                                               required=""/>
+                                        <div className="invalid-feedback">
+                                            Valid last name is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="username">Username</label>
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <span className="input-group-text">@</span>
+                                        </div>
+                                        <input type="text" className="form-control" id="username" placeholder="Username"
+                                               required=""/>
+                                        <div className="invalid-feedback">
+                                            Your username is required.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
+                                    <input type="email" className="form-control" id="email" placeholder="you@example.com"/>
+                                    <div className="invalid-feedback">
+                                        Please enter a valid email address for shipping updates.
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="address">Address</label>
+                                    <input type="text" className="form-control" id="address" placeholder="1234 Main St"
+                                           required=""/>
+                                    <div className="invalid-feedback">
+                                        Please enter your shipping address.
+                                    </div>
+                                </div>
+
+                                <div className="mb-3">
+                                    <label htmlFor="address2">Address 2 <span
+                                        className="text-muted">(Optional)</span></label>
+                                    <input type="text" className="form-control" id="address2"
+                                           placeholder="Apartment or suite"/>
+                                </div>
+
+                                <div className="row">
+                                    <div className="col-md-5 mb-3">
+                                        <label htmlFor="country">Country</label>
+                                        <select className="custom-select d-block w-100" id="country" required="" onChange={()=> console.warn('hello')}>
+                                            <option value="">Choose...</option>
+                                            <option>United States</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            Please select a valid country.
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4 mb-3">
+                                        <label htmlFor="state">State</label>
+                                        <select className="custom-select d-block w-100" id="state" required="" onChange={()=> console.warn('hello')}>
+                                            <option value="">Choose...</option>
+                                            <option>California</option>
+                                        </select>
+                                        <div className="invalid-feedback">
+                                            Please provide a valid state.
+                                        </div>
+                                    </div>
+                                    <div className="col-md-3 mb-3">
+                                        <label htmlFor="zip">Zip</label>
+                                        <input type="text" className="form-control" id="zip" placeholder="" required=""/>
+                                        <div className="invalid-feedback">
+                                            Zip code required.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> : ''}
                         </form>
-                    </Col>
+                    </div>
                 </Row>
                 <div className={'w-100 card-header'}>
                     <Card.Title>
-                        Total
+                        <div>Subtotal:</div>
+                        <div>Shipping:</div>
+                        <div>Total:</div>
                     </Card.Title>
                 </div>
-                <Row className={'d-flex flex-column p-2'}>
-                    <div>Subtotal:</div>
-                    <div>Shipping:</div>
-                    <div>Total:</div>
-                </Row>
             </Card.Body>
             <Card.Footer>
-                <Button className={'w-100'} onClick={handleCheckoutClick}>Checkout</Button>
+                <Button className={'w-100'} onClick={()=>handleCheckoutClick()}>Checkout</Button>
             </Card.Footer>
         </Card>
     )

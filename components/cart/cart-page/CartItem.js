@@ -47,10 +47,11 @@ const CartItem = ({item, index, setCart}) => {
             key: productQryInput.key,
             quantity: parseInt(productQryInput.quantity)
         },
-        onCompleted: () => {
+        onCompleted: async () => {
             // On Success:
             // 1. Make the GET_CART query to update the cart with new values in React context.
             // 2. Show View Cart Button
+            await updateCart(setCart)
         },
         onError: (error) => {
             if (error) {
@@ -64,9 +65,7 @@ const CartItem = ({item, index, setCart}) => {
     }
     const handleChange = async ( e ) => {
         await setProductCount(e.target.value)
-        await updateItem()
-        updateCart(setCart)
-
+        updateItem()
         /*
         if ( process.browser ) {
 

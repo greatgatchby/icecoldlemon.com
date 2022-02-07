@@ -148,7 +148,7 @@ export const removeItemFromCart = ( id ) => {
             return existingCart
         }
 }
-//TODO get formatted cart
+//create checkout redirect with stripe
 export const checkOutInitiation = async () => {
 
 

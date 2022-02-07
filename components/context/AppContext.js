@@ -11,9 +11,9 @@ export const AppContext = React.createContext(undefined);
 export const AppProvider = (props) => {
     const [cart, setCart] = useState(null);
     const [requestError, setRequestError] = useState(null);
-    useEffect(async () => {
+    useEffect( () => {
         updateCart(setCart)
-    },[setCart])
+    },[])
     /*
     useEffect(() => {
         // Check if we are client-side before we access the localStorage

@@ -38,7 +38,9 @@ const AddToCartBtn = ( props ) => {
             quantity: productQryInput.quantity,
             productId: productQryInput.productId,
         },
-        onCompleted: () => {
+        onCompleted: async () => {
+            let result = await updateCart(setCart)
+            console.warn(result)
             setShowViewCart(true)
         },
         onError: (error) => {
@@ -51,8 +53,6 @@ const AddToCartBtn = ( props ) => {
         // If component is rendered client side.
         setRequestError(null);
         await addToCart()
-        let result = await updateCart(setCart)
-
     };
     /*useEffect(()=>{
         console.warn(cart)

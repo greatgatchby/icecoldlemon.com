@@ -8,6 +8,7 @@ function MyApp({ Component, pageProps }) {
   return (
       <AppProvider>
       <Layout>
+          <script src="http://localhost:8097"></script>
         <Component {...pageProps} />
       </Layout>
       </AppProvider>
