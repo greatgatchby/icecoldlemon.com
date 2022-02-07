@@ -23,17 +23,30 @@ const Checkout = () => {
             firstName: "Jake",
             lastName: "Ngatchu",
             phone: "07935242587",
-            state: "warwickshire"
+            state: "warwickshire",
+            zip: 'b911jj'
         },
         paymentMethod: "stripe",
+        shipping: {address1: "Q studoios",
+            city: "stoke-on-trent",
+            address2: "",
+            country: 'GB',
+            email: "jngatchu@gmail.com",
+            firstName: "Jake",
+            lastName: "Ngatchu",
+            phone: "07935242587",
+            state: "staffordshire",
+            zip: 'st47dq'
+        },
     }
+    const checkOutInput = billingEQshipping === false ? checkOutQryInput.billing + ',' + checkOutQryInput.shipping : checkOutQryInput.billing
     const [checkout, {
         data: checkoutRes,
         loading: checkOutLoading,
         error: checkOutError
     }] = useMutation(CHECKOUT, {
         variables: {
-            input: checkOutQryInput
+            input: checkOutInput
         },
         onCompleted: () => {
             updateCart(setCart)
@@ -137,28 +150,28 @@ const Checkout = () => {
                                     <label htmlFor="country">Country</label>
                                     <select className="custom-select d-block w-100" id="country" required="" onChange={()=> console.warn('hello')}>
                                         <option value="">Choose...</option>
-                                        <option>United States</option>
+                                        <option>United Kingdom</option>
                                     </select>
                                     <div className="invalid-feedback">
                                         Please select a valid country.
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-3">
-                                    <label htmlFor="state">State</label>
+                                    <label htmlFor="state">County</label>
                                     <select className="custom-select d-block w-100" id="state" required="" onChange={()=> console.warn('hello')}>
                                         <option value="">Choose...</option>
-                                        <option>California</option>
+                                        <option>Staffordshire</option>
                                     </select>
                                     <div className="invalid-feedback">
                                         Please provide a valid state.
                                     </div>
                                 </div>
                                 <div className="col-md-3 mb-3">
-                                    <label htmlFor="zip">Zip</label>
+                                    <label htmlFor="zip">Postcode</label>
                                     <input type="text" className="form-control" id="zip" placeholder="" required=""/>
-                                        <div className="invalid-feedback">
-                                            Zip code required.
-                                        </div>
+                                    <div className="invalid-feedback">
+                                        Postcode required.
+                                    </div>
                                 </div>
                             </div>
                             <hr className="mb-4" />
@@ -172,6 +185,7 @@ const Checkout = () => {
                                         <label className="custom-control-label" htmlFor="save-info">Register to Save Information for next time</label>
                                 </div>
                             {billingEQshipping === false ? <div>
+                                <h3 className={'mt-5'}>Shipping</h3>
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label htmlFor="firstName">First name</label>
@@ -234,27 +248,27 @@ const Checkout = () => {
                                         <label htmlFor="country">Country</label>
                                         <select className="custom-select d-block w-100" id="country" required="" onChange={()=> console.warn('hello')}>
                                             <option value="">Choose...</option>
-                                            <option>United States</option>
+                                            <option>United Kindom</option>
                                         </select>
                                         <div className="invalid-feedback">
                                             Please select a valid country.
                                         </div>
                                     </div>
                                     <div className="col-md-4 mb-3">
-                                        <label htmlFor="state">State</label>
+                                        <label htmlFor="state">County</label>
                                         <select className="custom-select d-block w-100" id="state" required="" onChange={()=> console.warn('hello')}>
                                             <option value="">Choose...</option>
-                                            <option>California</option>
+                                            <option>Staffordshire</option>
                                         </select>
                                         <div className="invalid-feedback">
                                             Please provide a valid state.
                                         </div>
                                     </div>
                                     <div className="col-md-3 mb-3">
-                                        <label htmlFor="zip">Zip</label>
+                                        <label htmlFor="zip">Postcode</label>
                                         <input type="text" className="form-control" id="zip" placeholder="" required=""/>
                                         <div className="invalid-feedback">
-                                            Zip code required.
+                                            Postcode required.
                                         </div>
                                     </div>
                                 </div>
