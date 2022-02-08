@@ -12,17 +12,17 @@ export const AppProvider = (props) => {
     const [cart, setCart] = useState(null);
     const [requestError, setRequestError] = useState(null);
     useEffect( () => {
-        updateCart(setCart)
-    },[])
-    /*
-    useEffect(() => {
-        // Check if we are client-side before we access the localStorage
-        if (process.browser) {
-            let cartData = localStorage.getItem('woo-next-cart');
-            cartData = null !== cartData ? JSON.parse(cartData) : '';
-            setCart(cartData);
+
+        // @TODO Will add option to show the cart with localStorage later.
+        if ( process.browser ) {
+
+            let cartData = localStorage.getItem( 'woo-next-cart' );
+            cartData = null !== cartData ? JSON.parse( cartData ) : '';
+            setCart( cartData );
+
         }
-    }, [setCart]);*/
+
+    }, [] );
     return (
         <AppContext.Provider value={[cart, setCart]}>
             {props.children}

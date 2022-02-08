@@ -1,19 +1,11 @@
 import {Button, Card, Col, FormSelect, Row} from "react-bootstrap";
-import Image from "next/image";
-import clearpayLogo from "../../assets/clearpay-badge-mintonblack79x15@2x.png";
-import applePayLogo from "../../assets/Apple_Pay_Mark_RGB_041619.svg";
-import googlePayLogo from "../../assets/GPay_Acceptance_Mark_800.png";
-import stripeLogo from "../../assets/Stripe wordmark - blurple (large).png";
 import React, {useContext, useState} from "react";
 import {AppContext} from "../context/AppContext";
 import {CHECKOUT} from '../mutations/checkout'
 import {useMutation} from "@apollo/client";
-import {updateCart} from '../../utils/Functions'
+
 
 const Checkout = () => {
-    const [cart,setCart] = useContext(AppContext)
-    const [,setRequestError] = useContext(AppContext)
-    const [billingEQshipping, setbillingEQshipping] = useState(true)
     let checkOutQryInput = {
         billing: {address1: "18 wadleys road",
             city: "solihull",
@@ -39,18 +31,26 @@ const Checkout = () => {
             zip: 'st47dq'
         },
     }
-    const checkOutInput = billingEQshipping === false ? checkOutQryInput.billing + ',' + checkOutQryInput.shipping : checkOutQryInput.billing
+    const [cart,setCart] = useContext(AppContext)
+    const [,setRequestError] = useContext(AppContext)
+    const [billingEQshipping, setbillingEQshipping] = useState(true)
+    const [shipping, setShipping] = useState(null)
+    const handleShippingSameasbilling = (e) => {
+        setbillingEQshipping(e.target.checked)
+    }
     const [checkout, {
-        data: checkoutRes,
-        loading: checkOutLoading,
-        error: checkOutError
+        data: checkoutResponse,
+        loading: checkoutLoading,
     }] = useMutation(CHECKOUT, {
-        variables: {
-            input: checkOutInput
+        headers: {
+            consumerKey: 'ck_d83f7facab11de19885f468ef40d1a2c351d43ec',
+            consumerSecret: 'cs_a5c99156011683051c92f17142b22379cfd71f3b',
         },
-        onCompleted: () => {
-            updateCart(setCart)
-            setShowViewCart(true)
+        variables: {
+            input: checkOutQryInput
+        },
+        oncomplete: (data) => {
+            console.warn(data)
         },
         onError: (error) => {
             if (error) {
@@ -58,13 +58,15 @@ const Checkout = () => {
             }
         }
     })
-    const handleCheckoutClick = async () => {
-        let redirect = await checkout
-        console.warn(redirect())
+    const handleShippingChange = (e) => {
+        e.preventDefault()
+        setShipping(e.target.value)
     }
-    const handleShippingSameasbilling = (e) => {
-        setbillingEQshipping(e.target.checked)
-    }
+    const handleFormSubmit = async (e) => {
+        e.preventDefault()
+        let result = await checkout()
+        console.warn(result)
+    };
     return (
         <Card className={'p-0 m-0'}>
             <Card.Header>
@@ -76,10 +78,11 @@ const Checkout = () => {
                 <Row className={'d-flex justify-content-center p-3'}>
                     <Col xs={8}>
                         <form>
-                            <FormSelect onChange={()=> console.warn('hello')}>
-                                <option>Express</option>
-                                <option>Standard</option>
-                                <option>Click and Collect</option>
+                            <FormSelect onSelect={handleShippingChange} value={shipping}>
+                                <option>...</option>
+                                <option value={'express'}>Express</option>
+                                <option value={'standard'}>Standard</option>
+                                <option value={'click and collect'}>Click and Collect</option>
                             </FormSelect>
                         </form>
                     </Col>
@@ -285,7 +288,7 @@ const Checkout = () => {
                 </div>
             </Card.Body>
             <Card.Footer>
-                <Button className={'w-100'} onClick={()=>handleCheckoutClick()}>Checkout</Button>
+                <Button className={'w-100'} onClick={handleFormSubmit}>Checkout</Button>
             </Card.Footer>
         </Card>
     )
