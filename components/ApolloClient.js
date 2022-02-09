@@ -15,13 +15,12 @@ export const middleware = new ApolloLink( ( operation, forward ) => {
 	if ( session ) {
 		operation.setContext( ( { headers = {} } ) => ( {
 			headers: {
-				"woocommerce-session": `Session ${ session }`
-			}
+				"woocommerce-session": `Session ${ session }`,
+			},
 		} ) );
 	}
 
 	return forward( operation );
-
 } );
 
 /**

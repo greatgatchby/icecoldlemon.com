@@ -2,7 +2,6 @@ import {Col, Container, Row} from "react-bootstrap";
 import CartItems from "../components/cart/cart-page/CartItems";
 import Checkout from "../components/cart/Checkout";
 import React from "react";
-
 const Cart = () => {
     return(
         <>
