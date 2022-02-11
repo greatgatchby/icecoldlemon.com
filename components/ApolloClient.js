@@ -13,10 +13,13 @@ export const middleware = new ApolloLink( ( operation, forward ) => {
 	const session = ( process.browser ) ?  localStorage.getItem( "woo-session" ) : null;
 
 	if ( session ) {
-		operation.setContext( ( { headers = {} } ) => ( {
+		operation.setContext((_, { headers }) => ( {
 			headers: {
 				"woocommerce-session": `Session ${ session }`,
 			},
+			fetchOptions: {
+				mode: 'no-cors'
+			}
 		} ) );
 	}
 
@@ -67,7 +70,7 @@ export const afterware = new ApolloLink( ( operation, forward ) => {
 const client = new ApolloClient({
 	link: middleware.concat( afterware.concat( createHttpLink({
 		uri: clientConfig.graphqlUrl,
-		fetch: fetch
+		fetch: fetch,
 	}) ) ),
 	cache: new InMemoryCache(),
 });

@@ -37,7 +37,6 @@ const CartItems = () =>{
                         </tbody>
                     </Table> : <div className={'p-5'}><h1>Cart Empty</h1></div>}
             </Card.Body>
-
             <Card.Footer>
                 Total: <b>{cart !== null && cart ? <>{cart.totalProductsPrice}</> : '' }</b>
             </Card.Footer>

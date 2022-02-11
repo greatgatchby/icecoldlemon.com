@@ -3,6 +3,8 @@ import React, {useContext, useState} from "react";
 import {AppContext} from "../context/AppContext";
 import {CHECKOUT} from '../mutations/checkout'
 import {useMutation} from "@apollo/client";
+import {paymentIntent} from '../stripe/session'
+import {getFloatVal} from '../../utils/Functions'
 
 
 const Checkout = () => {
@@ -81,6 +83,7 @@ const Checkout = () => {
             input: checkOutQryInput
         },
         oncomplete: (data) => {
+
         },
         onError: (error) => {
             if (error) {
@@ -156,8 +159,9 @@ const Checkout = () => {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault()
-        let result = await checkout()
-    };
+        console.warn(paymentIntent(4000))
+    }
+
     return (
         <Card className={'p-0 m-0'}>
             <Card.Header>
