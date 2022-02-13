@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import clientConfig from '../client-config'
 import { ApolloClient, ApolloLink, InMemoryCache, createHttpLink } from "@apollo/client";
 
 /**
@@ -13,17 +12,14 @@ export const middleware = new ApolloLink( ( operation, forward ) => {
 	const session = ( process.browser ) ?  localStorage.getItem( "woo-session" ) : null;
 
 	if ( session ) {
-		operation.setContext((_, { headers }) => ( {
+		operation.setContext( ( { headers = {} } ) => ( {
 			headers: {
 				"woocommerce-session": `Session ${ session }`,
-			},
-			fetchOptions: {
-				mode: 'no-cors'
 			}
 		} ) );
 	}
-
 	return forward( operation );
+
 } );
 
 /**
@@ -69,8 +65,8 @@ export const afterware = new ApolloLink( ( operation, forward ) => {
 // Apollo GraphQL client.
 const client = new ApolloClient({
 	link: middleware.concat( afterware.concat( createHttpLink({
-		uri: clientConfig.graphqlUrl,
-		fetch: fetch,
+		uri: `${process.env.NEXT_PUBLIC_WORDPRESS_URL}/graphql`,
+		fetch: fetch
 	}) ) ),
 	cache: new InMemoryCache(),
 });

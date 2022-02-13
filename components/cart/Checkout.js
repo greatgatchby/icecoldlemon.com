@@ -2,8 +2,10 @@ import {Button, Card, Col, FormSelect, Row} from "react-bootstrap";
 import React, {useContext, useState} from "react";
 import {AppContext} from "../context/AppContext";
 import {CHECKOUT} from '../mutations/checkout'
-import {useMutation} from "@apollo/client";
-import {paymentIntent} from '../stripe/session'
+import {CLEAR_CART_MUTATION} from '../mutations/clearCart'
+import {GET_CART} from '../queries/cart'
+import {useMutation, useQuery} from "@apollo/client";
+import {handleStripeCheckout} from '../stripe/session'
 import {getFloatVal} from '../../utils/Functions'
 
 
@@ -33,6 +35,9 @@ const Checkout = () => {
     const [phone, setPhone] = useState('')
     const [shippingState, setShippingState] = useState('')
     const [shippingZip, setShippingZip] = useState('')
+    const [isStripeOrderProcessing, setIsStripeOrderProcessing] = useState(false);
+    const [createdOrderData, setCreatedOrderData] = useState({});
+
     let checkOutQryInput = {
         billing: {address1: billingAddress1,
             city: billingCity,
@@ -46,7 +51,8 @@ const Checkout = () => {
             zip: billingZip
         },
         paymentMethod: "stripe",
-        shipping: {address1: shippingAddress1,
+        shipping: {
+            address1: shippingAddress1,
             city: shippingCity,
             address2: shippingAddress2,
             country: shippingCountry,
@@ -56,7 +62,7 @@ const Checkout = () => {
             phone: phone,
             state: shippingState,
             zip: shippingZip
-        },
+        }
     }
     billingEQshipping === true ? checkOutQryInput = {
         billing: {address1: billingAddress1,
@@ -71,6 +77,18 @@ const Checkout = () => {
             zip: billingZip
         },
         paymentMethod: "stripe",
+        shipping: {
+            address1: billingAddress1,
+                city: billingCity,
+                address2: billingAddress2,
+                country: 'GB',
+                email: billingEmail,
+                firstName: billingFirstName,
+                lastName: billingLastName,
+                phone: phone,
+                state: billingState,
+                zip: billingZip
+        }
     } : null
     const handleShippingSameasbilling = (e) => {
         setbillingEQshipping(e.target.checked)
@@ -82,15 +100,14 @@ const Checkout = () => {
         variables: {
             input: checkOutQryInput
         },
-        oncomplete: (data) => {
-
-        },
         onError: (error) => {
             if (error) {
                 setRequestError(error?.graphQLErrors?.[0]?.message ?? '');
             }
         }
-    })
+    });
+    const [ clearCartMutation ] = useMutation( CLEAR_CART_MUTATION );
+
     const handleShippingChange = (e) => {
         e.preventDefault()
         setShipping(e.target.value)
@@ -159,7 +176,17 @@ const Checkout = () => {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault()
-        console.warn(paymentIntent(4000))
+        if ( 'stripe' === checkOutQryInput.paymentMethod ) {
+            const createdOrderData = await handleStripeCheckout(checkOutQryInput, cart?.products, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
+            return null;
+        }
+        const checkOutData = checkOutQryInput;
+        setRequestError(null);
+        /**
+         *  When order data is set, checkout mutation will automatically be called,
+         *  because 'orderData' is added in useEffect as a dependency.
+         */
+        setOrderData(checkOutData);
     }
 
     return (
@@ -265,8 +292,8 @@ const Checkout = () => {
                                 <div className="col-md-4 mb-3">
                                     <label htmlFor="state">County</label>
                                     <select className="custom-select d-block w-100" id="state" required="" onChange={handleBillingStateChange} value={billingState}>
-                                        <option value="">Choose...</option>
-                                        <option>Staffordshire</option>
+                                        <option>Choose...</option>
+                                        <option value="Warwickshire">Warwickshire</option>
                                     </select>
                                     <div className="invalid-feedback">
                                         Please provide a valid state.

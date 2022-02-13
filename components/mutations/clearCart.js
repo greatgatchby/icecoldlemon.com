@@ -1,6 +1,9 @@
 import {gql} from "@apollo/client";
-const CLEAR_CART = gql`
-mutation CLEAR_CART {
-  emptyCart(input: {clearPersistentCart: true})
+export const CLEAR_CART_MUTATION = gql`
+mutation CLEAR_CART_MUTATION {
+  emptyCart(input: {}) {
+    clientMutationId
+  }
 }
+
 `
