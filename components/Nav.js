@@ -8,8 +8,6 @@ import NavLink from "next/link";
 const Navigation = () => {
     return(
         <>
-
-
             <Navbar expand="lg" className={'fixed-top navbar-dark bg-nav overlay'}>
                 <Row className={'logo text-center'}>
                         <NavLink href={'/'}><a><Image className={'shadow-lg logo'} src={logo}  alt={'logo: jn in square at 90 degrees'}/></a></NavLink>
@@ -32,7 +30,6 @@ const Navigation = () => {
                             <NavLink href="/category?category=sneaker%20care"><a className="nav-link">Sneaker Care</a></NavLink>
                             <NavLink href="/category?category=gifts"><a className="nav-link">Gifts</a></NavLink>
                             <NavLink href="/post?id=someid"><a className="nav-link">About us</a></NavLink>
-                            <NavLink href="/post?id=someid"><a className="nav-link">Charity</a></NavLink>
                         </Nav>
                             <div className={'d-none d-lg-block'}>
                                 <a href={'https://www.fiverr.com/share/7WQXv1'}><Button className={'btn btn-primary btn-header px-5 me-2'}>Login</Button></a>

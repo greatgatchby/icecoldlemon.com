@@ -176,8 +176,9 @@ const Checkout = () => {
 
     const handleFormSubmit = async (e) => {
         e.preventDefault()
+        let cartProducts = JSON.parse(localStorage.getItem('woo-next-cart')).products
         if ( 'stripe' === checkOutQryInput.paymentMethod ) {
-            const createdOrderData = await handleStripeCheckout(checkOutQryInput, cart?.products, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
+            const createdOrderData = await handleStripeCheckout(checkOutQryInput, cartProducts, setRequestError, clearCartMutation, setIsStripeOrderProcessing, setCreatedOrderData);
             return null;
         }
         const checkOutData = checkOutQryInput;

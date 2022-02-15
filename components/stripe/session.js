@@ -4,7 +4,6 @@ import {isEmpty, isArray} from 'lodash'
 
 export const getCreateOrderData = (order, products) => {
     // Set the billing Data to shipping, if applicable.
-
     // Checkout data.
     return {
         shipping: {
@@ -15,7 +14,7 @@ export const getCreateOrderData = (order, products) => {
             city: order?.shipping?.city,
             country: order?.shipping?.country,
             state: order?.shipping?.state,
-            postcode: order?.shipping?.postcode,
+            postcode: order?.shipping?.zip,
             email: order?.shipping?.email,
             phone: order?.shipping?.phone,
             company: order?.shipping?.company,
@@ -28,7 +27,7 @@ export const getCreateOrderData = (order, products) => {
             city: order?.billing?.city,
             country: order?.billing?.country,
             state: order?.billing?.state,
-            postcode: order?.billing?.postcode,
+            postcode: order?.billing?.zip,
             email: order?.billing?.email,
             phone: order?.billing?.phone,
             company: order?.billing?.company,
@@ -40,13 +39,14 @@ export const getCreateOrderData = (order, products) => {
 }
 
 export const getCreateOrderLineItems = (products) => {
-
     if (isEmpty(products) || !isArray( products )) {
         return []
     }
 
     return products?.map(
         ({id, qty: quantity}) => {
+            id = new Buffer(id, "base64")
+            id = id.toString('ascii').split(':')[1]
             return {
                 quantity,
                 product_id: id,
@@ -71,7 +71,6 @@ export const createTheOrder = async ( orderData, setOrderFailedError, previousRe
     }
 
     setOrderFailedError( '' );
-
     try {
         const request = await fetch( '/api/order', {
             method: 'POST',
@@ -86,7 +85,7 @@ export const createTheOrder = async ( orderData, setOrderFailedError, previousRe
             response.error = result.error
             setOrderFailedError( 'Something went wrong. Order creation failed. Please try again' );
         }
-        response.orderId = result?.orderId ?? '';
+        response.id = result?.orderId ?? '';
         response.total = result.total ?? '';
         response.currency = result.currency ?? '';
 
@@ -105,8 +104,7 @@ export const handleStripeCheckout = async (input, products, setRequestError, cle
     const cartCleared = await clearTheCart( clearCartMutation, createCustomerOrder?.error );
     setIsStripeOrderProcessing(false);
 
-    console.warn(createCustomerOrder)
-
+    console.warn(orderData)
     if ( isEmpty( createCustomerOrder?.orderId ) || cartCleared?.error ) {
         console.log( 'came in' );
         setRequestError('Clear cart failed')
