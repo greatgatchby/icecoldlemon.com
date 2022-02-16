@@ -5,7 +5,9 @@ const api = new WooCommerceRestApi({
     url: process.env.NEXT_PUBLIC_WORDPRESS_URL,
     consumerKey: process.env.WC_CONSUMER_KEY,
     consumerSecret: process.env.WC_CONSUMER_SECRET,
-    version: "wc/v3"
+    wpAPI: true,
+    version: "wc/v3",
+    wpAPIPrefix: 'wp-json?rest_route='
 });
 
 /**
@@ -13,10 +15,6 @@ const api = new WooCommerceRestApi({
  *
  * @see http://woocommerce.github.io/woocommerce-rest-api-docs/?javascript#create-an-order
  *
- * @param {Object} req Request.
- * @param {Object} res Response.
- *
- * @return {Promise<{orderId: string, success: boolean, error: string}>}
  */
 export default async function handler(req, res) {
 

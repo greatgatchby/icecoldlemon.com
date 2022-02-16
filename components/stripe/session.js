@@ -63,7 +63,6 @@ export const createTheOrder = async ( orderData, setOrderFailedError, previousRe
         currency: '',
         error: ''
     };
-
     // Don't proceed if previous request has error.
     if ( previousRequestError ) {
         response.error = previousRequestError;
@@ -78,14 +77,14 @@ export const createTheOrder = async ( orderData, setOrderFailedError, previousRe
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify( orderData ),
-        } );
+        });
 
         const result = await request.json();
         if ( result.error ) {
             response.error = result.error
             setOrderFailedError( 'Something went wrong. Order creation failed. Please try again' );
         }
-        response.id = result?.orderId ?? '';
+        response.orderId = result?.orderId ?? '';
         response.total = result.total ?? '';
         response.currency = result.currency ?? '';
 
@@ -104,7 +103,6 @@ export const handleStripeCheckout = async (input, products, setRequestError, cle
     const cartCleared = await clearTheCart( clearCartMutation, createCustomerOrder?.error );
     setIsStripeOrderProcessing(false);
 
-    console.warn(orderData)
     if ( isEmpty( createCustomerOrder?.orderId ) || cartCleared?.error ) {
         console.log( 'came in' );
         setRequestError('Clear cart failed')
